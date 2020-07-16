@@ -1,0 +1,98 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Bienvenue sur ResPL{% endblock %}
+
+{% block body %}
+<h3>Comptabilite</h3>
+
+<ul class="uk-iconnav">
+    <li><a href="#modal-budget" uk-icon="icon: move" uk-toggle uk-tooltip="Créer depuis un budget"></a></li>
+    <li><a href="#modal-nouveau" uk-icon="icon: plus" uk-toggle uk-tooltip="Créer un nouveau tableau"></a></li>
+    <li><a href="#modal-supprimer" uk-icon="icon: trash" uk-toggle uk-tooltip="Supprimer un tableau"></a></li>
+</ul>
+
+<hr class="uk-divider-icon">
+
+{% if not comptabilite is empty %}
+<table class="uk-table uk-table-striped uk-table-large uk-table-middle">
+    <thead>
+        <tr>
+            <th>Nom</th>
+            <th class="uk-width-small">Créé par</th>
+            <th class="uk-width-small">Action</th>
+        </tr>
+    </thead>
+    <tbody>
+      {% for data in comptabilite %}
+        <tr>
+            <td>{{ data.nom }}</td>
+            <td>{{ data.createur.username }}</td>
+            <td><a class="uk-button uk-button-secondary" href="{{ path('app_comptabilite_view', {'id': data.id})}}">Voir</a></td>
+        </tr>
+      {% endfor %}
+    </tbody>
+</table>
+{% else %}
+<div class="uk-alert-primary" uk-alert>
+    <p>Pas de tableaux comptables trouvés.</p>
+</div>
+{% endif %}
+<hr class="uk-divider-icon">
+
+<div id="modal-budget" uk-modal>
+    <div class="uk-modal-dialog">
+        <button class="uk-modal-close-default" type="button" uk-close></button>
+        <div class="uk-modal-header">
+            <h2 class="uk-modal-title">Créer depuis un budget</h2>
+        </div>
+        <div class="uk-modal-body">
+            <p>Toutes les lignes se trouvant dans le budget selectionné seront ajoutées au passif du tableau comptable. Reste à équilibrer !</p>
+            {{ form_start(form_from, {'action': path('app_comptabilite_from'), 'method': 'POST'}) }}
+
+              {{ form_widget(form_from.nom, {'attr': {'class': 'uk-input uk-margin-small-bottom', 'placeholder': 'Nom du tableau'}}) }}
+              {{ form_widget(form_from.budgets, {'attr': {'class': 'uk-select'}}) }}
+        </div>
+        <div class="uk-modal-footer uk-text-right">
+            <button class="uk-button uk-button-default uk-modal-close" type="button">Fermer</button>
+            <button class="uk-button uk-button-primary" type="submit">Créer</button>
+            {{ form_end(form_from) }}
+        </div>
+    </div>
+</div>
+
+<div id="modal-nouveau" uk-modal>
+    <div class="uk-modal-dialog">
+        <button class="uk-modal-close-default" type="button" uk-close></button>
+        <div class="uk-modal-header">
+            <h2 class="uk-modal-title">Créer un nouveau tableau</h2>
+        </div>
+        <div class="uk-modal-body">
+        {{ form_start(form_creation, {'action': path('app_comptabilite_creation'), 'method': 'POST'}) }}
+          {{ form_widget(form_creation.nom, {'attr': {'class': 'uk-input uk-margin-small-bottom', 'placeholder': 'Nom du tableau'}}) }}
+        </div>
+        <div class="uk-modal-footer uk-text-right">
+            <button class="uk-button uk-button-default uk-modal-close" type="button">Fermer</button>
+            <button class="uk-button uk-button-primary" type="submit">Créer</button>
+            {{ form_end(form_creation) }}
+        </div>
+    </div>
+</div>
+
+<div id="modal-supprimer" uk-modal>
+    <div class="uk-modal-dialog">
+        <button class="uk-modal-close-default" type="button" uk-close></button>
+        <div class="uk-modal-header">
+            <h2 class="uk-modal-title">Supprimer un tableau</h2>
+        </div>
+        <div class="uk-modal-body">
+        {{ form_start(form_suppr, {'action': path('app_comptabilite_suppression'), 'method': 'POST'}) }}
+          {{ form_widget(form_suppr.comptabilites, {'attr': {'class': 'uk-select'}}) }}
+        </div>
+        <div class="uk-modal-footer uk-text-right">
+            <button class="uk-button uk-button-default uk-modal-close" type="button">Fermer</button>
+            <button class="uk-button uk-button-secondary" type="submit">Supprimer</button>
+            {{ form_end(form_suppr) }}
+        </div>
+    </div>
+</div>
+{% endblock %}

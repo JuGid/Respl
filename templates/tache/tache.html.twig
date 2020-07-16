@@ -1,0 +1,109 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Bienvenue sur ResPL{% endblock %}
+
+{% block body %}
+<h3>Tâches</h3>
+<ul class="uk-iconnav">
+    <li><a href="#modal-ajout" uk-icon="icon: plus" uk-toggle uk-tooltip="Ajouter"></a></li>
+    <li><a href="#modal-aide" uk-icon="icon: question" uk-toggle uk-tooltip="Aide"></a></li>
+</ul>
+<hr class="uk-divider-icon">
+
+<div class="uk-child-width-expand@s" uk-grid>
+  <div>
+    <div class="uk-card uk-card-primary uk-margin-small-bottom">
+      <div class="uk-card-header uk-text-center">
+        <h3 class="uk-card-title uk-margin-remove-bottom">A faire</h3>
+        <p class="uk-text-meta uk-margin-remove-top">Tâches à réaliser rapidement</p>
+      </div>
+    </div>
+
+    {% for taf in afaire %}
+    <div class="uk-card uk-card-default uk-margin-small-top">
+      <div class="uk-grid-collapse uk-padding-small" uk-grid>
+        <div>
+            <p class="uk-margin-remove-bottom uk-align-left uk-margin-medium-right">{{ taf.nom }}</p>
+            <p class="uk-text-meta uk-margin-remove-top"><time>{{ taf.creation | date('d/m/Y') }}</time></p>
+        </div>
+
+          <span class="uk-badge uk-position-center-right uk-margin-small-right"><a class="uk-link-reset" href="{{ path('app_tache_changement', { 'id': taf.id }) }}"><span uk-icon="chevron-right"></span></a></span>
+
+      </div>
+    </div>
+    {% endfor %}
+
+  </div>
+  <div>
+    <div class="uk-card uk-card-primary uk-margin-small-bottom">
+      <div class="uk-card-header uk-text-center">
+        <h3 class="uk-card-title uk-margin-remove-bottom">En cours</h3>
+        <p class="uk-text-meta uk-margin-remove-top">Tâches en cours de réalisation</p>
+      </div>
+    </div>
+
+    {% for tec in encours %}
+    <div class="uk-card uk-card-default uk-margin-small-top">
+      <div class="uk-grid-collapse uk-padding-small" uk-grid>
+        <div>
+            <p class="uk-margin-remove-bottom uk-align-left uk-margin-medium-right">{{ tec.nom }}</p>
+            <p class="uk-margin-remove-bottom uk-margin-remove-top uk-margin-medium-right uk-text-meta">{{ tec.responsable.username }}</p>
+            <p class="uk-text-meta uk-margin-remove-top"><time>{{ tec.creation | date('d/m/Y') }}</time></p>
+        </div>
+          <span class="uk-badge uk-position-center-right uk-margin-small-right"><a class="uk-link-reset" href="{{ path('app_tache_changement', { 'id': tec.id }) }}"><span uk-icon="chevron-right"></span></a></span>
+      </div>
+    </div>
+    {% endfor %}
+
+  </div>
+  <div>
+    <div class="uk-card uk-card-secondary uk-margin-small-bottom">
+      <div class="uk-card-header uk-text-center">
+        <h3 class="uk-card-title uk-margin-remove-bottom">Terminées</h3>
+        <p class="uk-text-meta uk-margin-remove-top">Tâches déjà réalisées</p>
+      </div>
+    </div>
+
+    {% for tt in termines %}
+    <div class="uk-card uk-card-default uk-margin-small-top">
+      <div class="uk-grid-collapse uk-padding-small" uk-grid>
+        <div>
+            <p class="uk-margin-remove-bottom uk-align-left uk-margin-medium-right">{{ tt.nom }}</p>
+            <p class="uk-margin-remove-bottom uk-margin-remove-top uk-margin-medium-right uk-text-meta">{{ tt.responsable.username }}</p>
+            <p class="uk-text-meta uk-margin-remove-top"><time>{{ tt.creation | date('d/m/Y') }}</time></p>
+        </div>
+
+          <span class="uk-badge uk-background-secondary uk-position-center-right uk-margin-small-right"><a class="uk-link-reset" href="{{ path('app_tache_changement', { 'id': tt.id }) }}"><span uk-icon="trash"></span></a></span>
+
+      </div>
+    </div>
+    {% endfor %}
+
+  </div>
+</div>
+
+<hr class="uk-divider-icon">
+
+<div id="modal-ajout" uk-modal>
+  <div class="uk-modal-dialog uk-modal-body">
+      <h2 class="uk-modal-title">Créer une tâche</h2>
+      {{ form_start(form) }}
+        {{ form_widget(form.nom, {'attr': {'class': 'uk-input', 'placeholder':'Nom de la tâche'}}) }}
+      <p class="uk-text-right">
+          <button class="uk-button uk-button-default uk-modal-close" type="button">Fermer</button>
+          <button class="uk-button uk-button-primary" type="submit">Ajouter</button>
+          {{ form_end(form) }}
+      </p>
+  </div>
+</div>
+
+<div id="modal-aide" uk-modal>
+  <div class="uk-modal-dialog uk-modal-body">
+      <h2 class="uk-modal-title">Aide</h2>
+      <p>L'application des tâches permet de les gérer au quotidien. Lorsqu'une personne créée une tâche, elle n'est assignée à personne et est ajoutée à la colonne 'A faire'. Lorsque la tâche est ajoutée à la colonne 'En cours' elle est assignée à la personne qui le fait. Cette personne est alors responsable de la tâche. Une fois la tâche terminée, elle peut être supprimée.</p>
+      <p class="uk-text-right">
+          <button class="uk-button uk-button-secondary uk-modal-close" type="button">Cancel</button>
+      </p>
+  </div>
+</div>
+{% endblock %}

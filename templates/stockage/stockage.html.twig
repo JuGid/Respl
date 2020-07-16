@@ -1,0 +1,20 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Bienvenue sur ResPL{% endblock %}
+
+{% block body %}
+<div class="uk-position-center">
+  <div class="uk-text-center"><h3>Stockage</h3></div>
+  <div class="uk-inline">
+  {{ form_start(stockage_form) }}
+      {{ form_widget(stockage_form) }}
+      <button class="uk-button uk-button-primary uk-align-center" type="submit">Envoyer</button>
+  {{ form_end(stockage_form) }}
+  </div>
+</div>
+
+{% endblock %}
+
+{% block javascripts %}
+  {{ parent() }}
+{% endblock %}

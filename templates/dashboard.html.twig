@@ -1,0 +1,76 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Bienvenue sur ResPL{% endblock %}
+
+{% block body %}
+
+<div class="uk-grid-column-small uk-grid-row-small uk-child-width-1-3@s" uk-grid>
+    <div>
+      <div class="uk-card uk-card-secondary">
+        <div class="uk-card-header">
+          <h3 class="uk-card-title uk-margin-remove-bottom"><span class="uk-margin-small-right" uk-icon="thumbnails"></span>Tâches</h3>
+        </div>
+        <div class="uk-card-body">
+            <p>Organiser les tâches à réaliser sur un planning défini avec des cartes et des dates fixes.</p>
+        </div>
+        <div class="uk-card-footer">
+            <a href="{{ path('app_tache') }}" class="uk-button uk-button-text">Aller sur Tâches</a>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="uk-card uk-card-secondary">
+        <div class="uk-card-header">
+          <h3 class="uk-card-title uk-margin-remove-bottom"><span class="uk-margin-small-right" uk-icon="settings"></span>Budget</h3>
+        </div>
+        <div class="uk-card-body">
+            <p>Permet de créer et gérer des budgets réalisés pour les achats. Il est possible de gérer des dépenses maximum.</p>
+        </div>
+        <div class="uk-card-footer">
+            <a href="{{ path('app_budget') }}" class="uk-button uk-button-text">Aller sur Budget</a>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="uk-card uk-card-secondary">
+        <div class="uk-card-header">
+          <h3 class="uk-card-title uk-margin-remove-bottom"><span class="uk-margin-small-right" uk-icon="credit-card"></span>Comptabilité</h3>
+        </div>
+        <div class="uk-card-body">
+            <p>Gérer la comptabilité en utilisant les débits et les crédits à la façon d'une comptabilité pour amateurs.</p>
+        </div>
+        <div class="uk-card-footer">
+            <a href="{{ path('app_comptabilite') }}" class="uk-button uk-button-text">Aller sur Comptabilité</a>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="uk-card uk-card-secondary">
+        <div class="uk-card-header">
+          <h3 class="uk-card-title uk-margin-remove-bottom"><span class="uk-margin-small-right" uk-icon="camera"></span>Stockage</h3>
+        </div>
+        <div class="uk-card-body">
+            <p>Gère l'ensemble des médias et permet de les stocker dans la Raspberry. Cet outils permet aussi la visualisation.</p>
+        </div>
+        <div class="uk-card-footer">
+            <a href="{{ path('app_stockage') }}" class="uk-button uk-button-text">Aller sur Stockage</a>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div class="uk-card uk-card-secondary">
+        <div class="uk-card-header">
+          <h3 class="uk-card-title uk-margin-remove-bottom"><span class="uk-margin-small-right" uk-icon="list"></span>Liste</h3>
+        </div>
+        <div class="uk-card-body">
+            <p>Permet de créer des listes pour différentes choses comme Noël ou les anniversaires avec les liens pour l'achat.</p>
+        </div>
+        <div class="uk-card-footer">
+            <a href="{{ path('app_liste') }}" class="uk-button uk-button-text">Aller sur Liste</a>
+        </div>
+      </div>
+    </div>
+
+</div>
+{% endblock %}

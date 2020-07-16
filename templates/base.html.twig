@@ -2,11 +2,79 @@
 <html>
     <head>
         <meta charset="UTF-8">
-        <title>{% block title %}Welcome!{% endblock %}</title>
-        {% block stylesheets %}{% endblock %}
+        <title>{% block title %}Titre{% endblock %}</title>
+        {% block stylesheets %}
+          <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/uikit@3.3.7/dist/css/uikit.min.css" />
+        {% endblock %}
     </head>
     <body>
-        {% block body %}{% endblock %}
-        {% block javascripts %}{% endblock %}
+        {% block menu %}
+        <nav class="uk-navbar-container" uk-navbar>
+          <div class="uk-navbar-left">
+
+            <ul class="uk-navbar-nav">
+                {% if app.user %}
+                  <li><a href="{{ path('app_dashboard') }}">Accueil</a></li>
+                {% else %}
+                  <li><a href="{{ path('app_index') }}">Accueil</a></li>
+                {% endif %}
+
+                {% if app.user %}
+                <li>
+                    <a href="#">Applications</a>
+                    <div class="uk-navbar-dropdown">
+                        <ul class="uk-nav uk-navbar-dropdown-nav">
+                            <li class="uk-nav-header">Gestion</li>
+                            <li><a href="{{ path('app_tache') }}">Tâches</a></li>
+                            <li><a href="{{ path('app_budget') }}">Budget</a></li>
+                            <li><a href="{{ path('app_comptabilite') }}">Comptabilité</a></li>
+                            <li class="uk-nav-header">Autre</li>
+                            <li><a href="{{ path('app_stockage') }}">Stockage</a></li>
+                            <li><a href="{{ path('app_liste') }}">Liste</a></li>
+                        </ul>
+                    </div>
+                </li>
+                {% endif %}
+            </ul>
+
+          </div>
+          <div class="uk-navbar-right">
+
+            <ul class="uk-navbar-nav">
+                <li>
+                    {% if app.user %}
+                      <a href="#">{{ app.user.username }}</a>
+                    {% else %}
+                      <a href="#">Anonyme</a>
+                    {% endif %}
+
+                    <div class="uk-navbar-dropdown">
+                        <ul class="uk-nav uk-navbar-dropdown-nav">
+                            <li class="uk-nav-header">Actions</li>
+                            {% if not app.user %}
+                              <li><a href="{{ path('app_login') }}">Connexion</a></li>
+                            {% endif %}
+
+                            {% if app.user %}
+                              <li><a href="{{ path('app_register') }}">Inscrire</a></li>
+                              <li><a class="uk-text-danger" href="{{ path('app_logout') }}">Deconnexion</a></li>
+                            {% endif %}
+
+                        </ul>
+                    </div>
+                </li>
+            </ul>
+          </div>
+        </nav>
+        {% endblock %}
+        <div class="uk-margin-medium uk-container">
+        {% block body %}
+
+        {% endblock %}
+        </div>
+        {% block javascripts %}
+          <script src="https://cdn.jsdelivr.net/npm/uikit@3.3.7/dist/js/uikit.min.js"></script>
+          <script src="https://cdn.jsdelivr.net/npm/uikit@3.3.7/dist/js/uikit-icons.min.js"></script>
+        {% endblock %}
     </body>
 </html>

@@ -1,0 +1,67 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Bienvenue sur ResPL{% endblock %}
+
+{% block body %}
+<ul class="uk-pagination">
+    <li><a href="{{ path('app_budget') }}"><span uk-pagination-previous></span> Budget</a></li>
+</ul>
+
+<h3>Récapitulatif du budget</h3>
+<ul class="uk-iconnav">
+    <li><a href="#modal-center" uk-icon="icon: settings" uk-toggle uk-tooltip="Configurer"></a></li>
+</ul>
+<hr class="uk-divider-icon">
+{% if not data is empty %}
+<table class="uk-table uk-table-striped uk-table-large uk-table-middle">
+    <thead>
+        <tr>
+            <th>Nom</th>
+            <th>Montant ({{ budget.getMontant }}€)</th>
+            <th class="uk-width-small">Action</th>
+        </tr>
+    </thead>
+    <tbody>
+      {% for ligne in data %}
+        <tr>
+            <td>{{ ligne.nom }}</td>
+            <td>{{ ligne.montant }}€</td>
+            <td><a href="{{ path('app_budget_sprligne', {'id':ligne.id , 'idBudget': budget.id}) }}" uk-icon="icon: trash" class="uk-text-danger"></a></td>
+        </tr>
+      {% endfor %}
+    </tbody>
+</table>
+{% if budget.max > 0 %}
+  <progress class="uk-progress" value="{{ budget.getMontant }}" max="{{ budget.max }}"></progress>
+{% endif %}
+
+{% else %}
+<div class="uk-alert-primary" uk-alert>
+    <p>Pas de lignes trouvés.</p>
+</div>
+{% endif %}
+<hr class="uk-divider-icon">
+{{ form_start(form) }}
+  {{ form_widget(form.nom, {'value': '', 'attr': {'class': 'uk-input uk-width-1-5', 'placeholder': 'Nom de la ligne'}}) }}
+  {{ form_widget(form.montant, {'value': '', 'attr': {'class': 'uk-input uk-width-1-5', 'placeholder': 'Montant'}}) }}
+  <button class="uk-button uk-button-primary" type="submit">Ajouter</button>
+{{ form_end(form) }}
+
+<div id="modal-center" class="uk-flex-top" uk-modal>
+  <div class="uk-modal-dialog">
+      <button class="uk-modal-close-default" type="button" uk-close></button>
+      <div class="uk-modal-header">
+          <h2 class="uk-modal-title">Configurer</h2>
+      </div>
+      <div class="uk-modal-body">
+          {{ form_start(form_max, {'action': path('app_budget_max', { 'id': budget.id }), 'method': 'POST'}) }}
+            {{ form_widget(form_max.montant, {'value': '', 'attr': {'class': 'uk-input', 'placeholder': 'Montant maximum'}}) }}
+
+      </div>
+      <div class="uk-modal-footer uk-text-right">
+          <button class="uk-button uk-button-primary" type="submit">Sauvegarder</button>
+          {{ form_end(form_max) }}
+      </div>
+  </div>
+</div>
+{% endblock %}

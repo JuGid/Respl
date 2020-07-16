@@ -1,0 +1,70 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Bienvenue sur ResPL{% endblock %}
+
+{% block body %}
+<ul class="uk-pagination">
+    <li><a href="{{ path('app_liste') }}"><span uk-pagination-previous></span> Liste</a></li>
+</ul>
+
+<h3>Liste</h3>
+<div class="uk-text-meta">Nom : {{ liste }}</div>
+
+<hr class="uk-divider-icon">
+{% if not data is empty %}
+<table class="uk-table uk-table-striped uk-table-large uk-table-middle">
+    <thead>
+        <tr>
+            <th>Nom</th>
+            <th>Prix</th>
+            <th>Optionnel</th>
+            <th>Lien</th>
+            <th class="uk-width-small">Action</th>
+        </tr>
+    </thead>
+    <tbody>
+      {% for ligne in data %}
+        <tr>
+            <td>{{ ligne.nom }}</td>
+            <td>{{ ligne.prix }}€</td>
+            <td>
+              {% if ligne.optionnel %}
+                <button class="uk-button uk-button-default uk-button-small">Optionnel</button>
+              {% else %}
+                <button class="uk-button uk-button-danger uk-button-small">Obligatoire</button>
+              {% endif %}
+            </td>
+            <td><a href="{{ ligne.lien }}" target="_blank" >{{ ligne.lien[:60] }}</a></td>
+            <td><a href="{{ path('app_liste_lignes_supprimer', {'id': ligne.id, 'idListe': id}) }}" uk-icon="icon: trash" class="uk-text-danger"></a></td>
+        </tr>
+      {% endfor %}
+    </tbody>
+</table>
+{% else %}
+<div class="uk-alert-primary" uk-alert>
+    <p>Pas de lignes trouvés.</p>
+</div>
+{% endif %}
+
+<p class="uk-text-meta">Ma liste contient {{ data | length }} élements pour un total de {{ total }}€ et {{ obligatoires }} objets obligatoires.</p>
+{{ form_start(form_creation) }}
+  <div class="uk-grid-small" uk-grid>
+    <div class="uk-width-1-4@s">
+      {{ form_widget(form_creation.nom, { 'value': '', 'attr': { 'class': 'uk-input', 'placeholder': 'Nom', 'autofocus':''}} ) }}
+    </div>
+    <div class="uk-width-1-4@s">
+      {{ form_widget(form_creation.prix, { 'value': '', 'attr': { 'class': 'uk-input', 'placeholder': '123,50'}} ) }}
+    </div>
+    <div class="uk-width-1-4@s">
+      {{ form_widget(form_creation.lien, { 'value': '', 'attr': { 'class': 'uk-input', 'placeholder': 'Lien du produit'}} ) }}
+    </div>
+    <div class="uk-width-1-4@s">
+      {{ form_widget(form_creation.optionnel, { 'attr':{ 'class': 'uk-checkbox'}}) }}
+    </div>
+    <div>
+      <button class="uk-button uk-button-primary" type="submit">Ajouter</button>
+    </div>
+  </div>
+{{ form_end(form_creation) }}
+<hr class="uk-divider-icon">
+{% endblock %}

@@ -1,0 +1,128 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Bienvenue sur ResPL{% endblock %}
+
+{% block body %}
+<ul class="uk-pagination">
+    <li><a href="{{ path('app_comptabilite') }}"><span uk-pagination-previous></span> Comptabilite</a></li>
+</ul>
+
+<h3>Comptabilite</h3>
+
+<ul class="uk-iconnav">
+    <li><a id="calculer" uk-icon="icon: bookmark" uk-tooltip="Calculer pour la selection"></a></li>
+    <li><a id="toutSelectionner" uk-icon="icon: plus" uk-tooltip="Tout selectionner"></a></li>
+    <li><a id="toutDeselectionner" uk-icon="icon: minus" uk-tooltip="Tout déselectionner"></a></li>
+</ul>
+
+<hr class="uk-divider-icon">
+
+<div class="uk-child-width-expand@s" uk-grid>
+  <div>
+  <table id="comptabilite-lignes" class="uk-table uk-table-responsive uk-table-divider">
+    <thead>
+        <tr>
+            <th class="uk-table-shrink"></th>
+            <th>Titre</th>
+            <th class="uk-text-success">Actif</th>
+            <th class="uk-text-danger">Passif</th>
+            <th class="uk-table-shrink">Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+      {% for data in lignes %}
+        <tr>
+            <td><input class="uk-checkbox" type="checkbox"></td>
+            <td>{{ data.nom }}</td>
+            <td>{{ data.actif }} {% if data.actif %}€{% endif %}</td>
+            <td>{{ data.passif }} {% if data.passif %}€{% endif %}</td>
+            <td>
+              <ul class="uk-iconnav">
+                  <li><a class="uk-text-danger" href="{{ path('app_comptabilite_lignes_supprimer', {'id':data.id, 'idComptabilite':idComptabilite}) }}" uk-icon="icon: trash"></a></li>
+              </ul>
+            </td>
+        </tr>
+      {% endfor %}
+        <tr>
+            <td></td>
+            <td class="uk-text-bold">TOTAL</td>
+            <td class="uk-text-bold">{{ total.0 }}€</td>
+            <td class="uk-text-bold">{{ total.1 }}€</td>
+            <td></td>
+        </tr>
+    </tbody>
+    </table>
+  </div>
+</div>
+<hr class="uk-divider-icon">
+{{ form_start(form_line) }}
+  {{ form_widget(form_line.nom, {'value': '', 'attr': {'class': 'uk-input uk-width-1-5', 'placeholder': 'Nom de la ligne'}}) }}
+  {{ form_widget(form_line.actif, {'value': '', 'attr': {'class': 'uk-input uk-width-1-5', 'placeholder': 'Actif'}}) }}
+  {{ form_widget(form_line.passif, {'value': '', 'attr': {'class': 'uk-input uk-width-1-5', 'placeholder': 'Passif'}}) }}
+  <button class="uk-button uk-button-primary" type="submit">Ajouter</button>
+{{ form_end(form_line) }}
+
+{% endblock %}
+
+{% block javascripts %}
+  {{ parent() }}
+  <script>
+  window.onload = function() {
+          var calculer = document.getElementById("calculer");
+          var toutSelectionner = document.getElementById("toutSelectionner");
+          var toutDeselectionner = document.getElementById("toutDeselectionner");
+          calculer.onclick = function() {
+
+            var i;
+            var rows = document.getElementById("comptabilite-lignes").rows;
+            var passif = 0;
+            var actif = 0;
+            var currentCell;
+
+            for (i = 0; i < rows.length; i++) {
+              var element = rows[i].cells[0].firstChild;
+              if(null !== element && element.checked) {
+                currentCell = rows[i].cells[2];
+                if(" " !== currentCell.innerHTML) {
+                  actif += parseFloat(currentCell.innerHTML.substring(0, currentCell.innerHTML.indexOf(" ")));
+                }
+
+                currentCell = rows[i].cells[3];
+                if(" " !== currentCell.innerHTML) {
+                  passif += parseFloat(currentCell.innerHTML.substring(0, currentCell.innerHTML.indexOf(" ")));
+                }
+              }
+            }
+
+
+            UIkit.modal.dialog("<div class=\"uk-modal-header\"><h2 class=\"uk-modal-title\">Résultats</h2></div><div class=\"uk-modal-body\">Sur les lignes selectionnées vous avez <span class=\"uk-text-success\">"+ actif +"€</span> d\'actifs et <span class=\"uk-text-danger\">"+ passif +"€</span> de passifs.</div><div class=\"uk-modal-footer uk-text-right\"><button class=\"uk-button uk-button-primary uk-modal-close\" type=\"button\">OK</button></div>");
+            //UIkit.modal.alert("Actif :" + actif + ", Passif : " + passif);
+            return false;
+          }
+
+          toutSelectionner.onclick = function() {
+            var i;
+            var rows = document.getElementById("comptabilite-lignes").rows;
+
+            for (i = 0; i < rows.length; i++) {
+              var element = rows[i].cells[0].firstChild;
+              if(null !== element && !element.checked) {
+                element.checked = true;
+              }
+            }
+          }
+
+          toutDeselectionner.onclick = function() {
+            var i;
+            var rows = document.getElementById("comptabilite-lignes").rows;
+
+            for (i = 0; i < rows.length; i++) {
+              var element = rows[i].cells[0].firstChild;
+              if(null !== element && element.checked) {
+                element.checked = false;
+              }
+            }
+          }
+        }
+  </script>
+{% endblock %}

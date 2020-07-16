@@ -1,0 +1,17 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Register{% endblock %}
+
+{% block body %}
+<div class="uk-position-center">
+    <h3>Inscription</h3>
+
+    {{ form_start(registrationForm) }}
+        {{ form_widget(registrationForm.username, {'value': '', 'attr': {'class': 'uk-input uk-margin-small-bottom', 'placeholder': 'Utilisateur'}}) }}
+        {{ form_widget(registrationForm.plainPassword, {'value': '', 'attr': {'class': 'uk-input uk-margin-small-bottom', 'placeholder': 'Mot de passe'}}) }}
+        {{ form_widget(registrationForm.agreeTerms, {'attr': {'class': 'uk-checkbox'}}) }}
+
+        <button class="uk-button uk-button-secondary uk-margin-small-top">Inscrire</button>
+    {{ form_end(registrationForm) }}
+    </div>
+{% endblock %}
